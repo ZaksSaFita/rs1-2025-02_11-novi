@@ -23,6 +23,8 @@ public class StudentRestoreEndpoint(ApplicationDbContext db) : MyEndpointBaseAsy
 
         // Restore
         student.IsDeleted = false;
+        student.DeletedBy = "";
+        student.DeletedAt = null;
         await db.SaveChangesAsync(cancellationToken);
     }
 }

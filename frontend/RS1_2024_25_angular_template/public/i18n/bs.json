@@ -11,6 +11,19 @@
     "PASSWORD_PLACEHOLDER": "Unesite šifru",
     "SAVE_LOGIN": "Sačuvaj prijavu",
     "BUTTON": "Prijavi se"
+  },
+  "SEM": {
+    "TITLE": "Novi semester za ",
+    "DATE": "Datum:",
+    "YEAR": "Godina studija:",
+    "YEAR_PH": "Unesite godinu studija",
+    "ACADEMIC": "Akademska godina:",
+    "ACADEMIC_PH": "Unesite akademsku godinu",
+    "PRICE": "Cijena:",
+    "PRICE_PH": "Unesite cijenu",
+    "RENEWAL": "Obnova",
+    "SAVE": "Sačuvaj",
+    "CANCEL": "Otkazi"
   }
 }
 

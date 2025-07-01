@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using RS1_2024_25.API.Data.Models.SharedTables;
 using RS1_2024_25.API.Data.Models.TenantSpecificTables.Modul1_Auth;
 using RS1_2024_25.API.Data.Models.TenantSpecificTables.Modul2_Basic;
@@ -7,13 +6,12 @@ using RS1_2024_25.API.Helper;
 using RS1_2024_25.API.Helper.BaseClasses;
 using RS1_2024_25.API.Services;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq.Expressions;
 
 namespace RS1_2024_25.API.Data;
 
 public class ApplicationDbContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : DbContext(options)
 {
-   
+    public DbSet<Semestar> Semestars { get; set; }
     public DbSet<AcademicYear> AcademicYears { get; set; }
     public DbSet<City> Cities { get; set; }
     public DbSet<Country> Countries { get; set; }
@@ -108,7 +106,7 @@ public class ApplicationDbContext(DbContextOptions options, IHttpContextAccessor
             }
         }
     }
- 
+
     public override int SaveChanges()
     {
         AddTenantIdToNewEntities();

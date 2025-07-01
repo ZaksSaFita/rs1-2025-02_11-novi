@@ -9,6 +9,8 @@ import {MyPagedList} from '../../helper/my-paged-list';
 // DTO za zahtjev
 export interface StudentGetAllRequest extends MyPagedRequest {
   q?: string; // Upit za pretragu (ime, prezime, broj indeksa, itd.)
+  qq?: string;
+  isDeleted?: boolean;
 }
 
 // DTO za odgovor
@@ -19,6 +21,9 @@ export interface StudentGetAllResponse {
   studentNumber: string;
   citizenship?: string; // Državljanstvo
   birthMunicipality?: string; // Općina rođenja
+  isDeleted?: boolean;
+  deletedAt: Date;
+  deletedBy?: string;
 }
 
 @Injectable({

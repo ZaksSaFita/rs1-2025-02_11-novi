@@ -11,5 +11,18 @@
     "PASSWORD_PLACEHOLDER": "Enter password",
     "SAVE_LOGIN": "Save login",
     "BUTTON": "Login"
+  },
+  "SEM": {
+    "TITLE": "New semester for ",
+    "DATE": "Date:",
+    "YEAR": "Year of study:",
+    "YEAR_PH": "Enter Year of study",
+    "ACADEMIC": "Academic year:",
+    "ACADEMIC_PH": "Enter Academic year:",
+    "PRICE": "Price:",
+    "PRICE_PH": "Enter Price",
+    "RENEWAL": "Renewal",
+    "SAVE": "Save",
+    "CANCEL": "Cancel"
   }
 }

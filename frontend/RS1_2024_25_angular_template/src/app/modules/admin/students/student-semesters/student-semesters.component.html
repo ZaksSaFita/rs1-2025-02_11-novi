@@ -1,1 +1,41 @@
-<p>student-semesters works!</p>
+<p>Student ID: {{ student?.id }} </p>
+<p>Student Name: {{ student?.firstName }}</p>
+<p>Student LastName: {{ student?.lastName }}</p>
+
+<table [dataSource]="semesters!" class="mat-elevation-z8" mat-table matSort>
+  <!-- First Name Column -->
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>id</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.id }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="academicYear">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>academicYear</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.academicYear }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="yearOfStudy">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>yearOfStudy</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.yearOfStudy }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="renewal">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>renewal</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.renewal }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>date</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.date | date }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="myAppUser">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>myAppUser</mat-header-cell>
+    <mat-cell *matCellDef="let student">{{ student.myAppUser }}</mat-cell>
+  </ng-container>
+
+  <!-- Table Header and Rows -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</table>
+<button (click)="newSemester()" color="primary" mat-raised-button>enroll new semester</button>

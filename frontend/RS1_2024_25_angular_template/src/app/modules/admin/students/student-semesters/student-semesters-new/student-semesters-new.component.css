@@ -1,0 +1,27 @@
+.semesters {
+  width: 500px;
+  height: 500px;
+  display: flex;
+  margin: auto;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
+}
+
+.datum {
+  height: 50px;
+  border-radius: 5px;
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  padding: 0 10px;
+  margin-bottom: 20px;
+}
+
+.datum input {
+  height: 30px;
+  width: 150px;
+  font-size: 20px;
+}

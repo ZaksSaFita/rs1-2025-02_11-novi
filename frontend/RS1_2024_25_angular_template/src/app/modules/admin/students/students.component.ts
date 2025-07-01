@@ -1,16 +1,19 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { StudentGetAllResponse } from '../../../endpoints/student-endpoints/student-get-all-endpoint.service';
-import { StudentGetAllEndpointService } from '../../../endpoints/student-endpoints/student-get-all-endpoint.service';
-import { StudentDeleteEndpointService } from '../../../endpoints/student-endpoints/student-delete-endpoint.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
-import { MyDialogConfirmComponent } from '../../shared/dialogs/my-dialog-confirm/my-dialog-confirm.component';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {
+  StudentGetAllEndpointService,
+  StudentGetAllResponse
+} from '../../../endpoints/student-endpoints/student-get-all-endpoint.service';
+import {StudentDeleteEndpointService} from '../../../endpoints/student-endpoints/student-delete-endpoint.service';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MyDialogConfirmComponent} from '../../shared/dialogs/my-dialog-confirm/my-dialog-confirm.component';
 import {MySnackbarHelperService} from '../../shared/snackbars/my-snackbar-helper.service';
-import {MyDialogSimpleComponent} from '../../shared/dialogs/my-dialog-simple/my-dialog-simple.component';
+import {StudentRestoreEndpointService} from '../../../endpoints/student-endpoints/student-restore-endpoint.service';
+import {debounceTime, distinctUntilChanged, filter, Subject} from 'rxjs';
+import {map, tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-students',
@@ -19,42 +22,92 @@ import {MyDialogSimpleComponent} from '../../shared/dialogs/my-dialog-simple/my-
   standalone: false
 })
 export class StudentsComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['firstName', 'lastName', 'studentNumber', 'actions'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'studentNumber', 'deletedAt', 'deletedBy', 'actions'];
   dataSource: MatTableDataSource<StudentGetAllResponse> = new MatTableDataSource<StudentGetAllResponse>();
   students: StudentGetAllResponse[] = [];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  deletedStudents: boolean = false;
+  pretraga1: string = "";
+  pretraga2: string = "";
+  private searchSubject: Subject<string> = new Subject();
+  private searchSubject2: Subject<string> = new Subject();
 
   constructor(
     private studentGetService: StudentGetAllEndpointService,
     private studentDeleteService: StudentDeleteEndpointService,
     private snackbar: MySnackbarHelperService,
     private router: Router,
-    private dialog: MatDialog
-  ) {}
+    private dialog: MatDialog,
+    private vratinamga: StudentRestoreEndpointService
+  ) {
+  }
+
+  restoreStudent(id: any) {
+    this.vratinamga.handleAsync(id).subscribe(res => {
+      console.log(res);
+      this.fetchStudents();
+    })
+  }
 
   ngOnInit(): void {
     this.fetchStudents();
+    this.initSearchListener();
+  }
+
+  initSearchListener(): void {
+    this.searchSubject.pipe(
+      debounceTime(300), // Vrijeme čekanja (300ms)
+      distinctUntilChanged(), // Emittuje samo ako je vrijednost promijenjena,
+      map(ld => ld.toLowerCase()),
+      filter(bd => bd.length > 3 || bd.length == 0),
+    ).subscribe((filterValue) => {
+      this.pretraga1 = filterValue;
+      this.fetchStudents(this.pretraga1, this.pretraga2, this.paginator.pageIndex + 1, this.paginator.pageSize);
+    });
+    this.searchSubject2.pipe(
+      debounceTime(300), // Vrijeme čekanja (300ms)
+      distinctUntilChanged(), // Emittuje samo ako je vrijednost promijenjena,
+      map(ld => ld.toLowerCase()),
+      filter(bd => bd.length > 3 || bd.length == 0),
+    ).subscribe((filterValue) => {
+      this.pretraga2 = filterValue;
+      this.fetchStudents(this.pretraga1, this.pretraga2, this.paginator.pageIndex + 1, this.paginator.pageSize);
+      this.deletedStudents = true;
+    });
   }
 
   ngAfterViewInit(): void {
     this.paginator.page.subscribe(() => {
       const filterValue = this.dataSource.filter || '';
-      this.fetchStudents(filterValue, this.paginator.pageIndex + 1, this.paginator.pageSize);
+      this.fetchStudents(this.pretraga1, this.pretraga2, this.paginator.pageIndex + 1, this.paginator.pageSize);
     });
   }
 
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
-    this.fetchStudents(filterValue, this.paginator.pageIndex + 1, this.paginator.pageSize);
+    // this.fetchStudents(filterValue, this.paginator.pageIndex + 1, this.paginator.pageSize);
+    this.searchSubject.next(filterValue);
   }
 
-  fetchStudents(filter: string = '', page: number = 1, pageSize: number = 5): void {
+  applyFilter2(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    // this.fetchStudents(filterValue, this.paginator.pageIndex + 1, this.paginator.pageSize);
+    this.searchSubject2.next(filterValue);
+  }
+
+  fetchStudents(pretraga1: string = '', pretraga2: string = '', page: number = 1, pageSize: number = 5): void {
     this.studentGetService.handleAsync({
-      q: filter,
+      q: pretraga1,
+      qq: pretraga2,
+      isDeleted: this.deletedStudents,
       pageNumber: page,
       pageSize: pageSize
-    }).subscribe({
+    }).pipe(
+      tap(students => {
+        console.log("records", students.totalCount);
+      })
+    ).subscribe({
       next: (data) => {
         this.dataSource = new MatTableDataSource<StudentGetAllResponse>(data.dataItems);
         this.paginator.length = data.totalCount;
@@ -102,13 +155,12 @@ export class StudentsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openStudentSemesters(id:number) {
-    this.dialog.open(MyDialogSimpleComponent, {
-      width: '350px',
-      data: {
-        title: 'Ispitni zadatak',
-        message: 'Implementirajte matičnu knjigu?'
-      }
-    });
+  openStudentSemesters(id: number) {
+    this.router.navigate(['/admin/students/semestar/', id]);
+  }
+
+  toogle() {
+    this.deletedStudents = !this.deletedStudents;
+    this.fetchStudents();
   }
 }

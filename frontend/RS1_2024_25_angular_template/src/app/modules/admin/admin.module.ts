@@ -38,12 +38,16 @@ import {
 } from './rxjs-subject-message-example/rxjs-subject-message-example.component';
 import {SenderComponent} from './rxjs-subject-message-example/sender/sender.component';
 import {Receiver2Component} from './rxjs-subject-message-example/receiver2/receiver2.component';
-import { Receiver1Component } from './rxjs-subject-message-example/receiver1/receiver1.component';
-import { Receiver3Component } from './rxjs-subject-message-example/receiver3/receiver3.component';
-import { StudentsComponent } from './students/students.component';
-import { StudentEditComponent } from './students/student-edit/student-edit.component';
-import { StudentSemestersComponent } from './students/student-semesters/student-semesters.component';
-import { StudentSemestersNewComponent } from './students/student-semesters/student-semesters-new/student-semesters-new.component';
+import {Receiver1Component} from './rxjs-subject-message-example/receiver1/receiver1.component';
+import {Receiver3Component} from './rxjs-subject-message-example/receiver3/receiver3.component';
+import {StudentsComponent} from './students/students.component';
+import {StudentEditComponent} from './students/student-edit/student-edit.component';
+import {StudentSemestersComponent} from './students/student-semesters/student-semesters.component';
+import {
+  StudentSemestersNewComponent
+} from './students/student-semesters/student-semesters-new/student-semesters-new.component';
+import {MatCheckbox} from "@angular/material/checkbox";
+import {TranslatePipe} from "@ngx-translate/core";
 
 
 @NgModule({
@@ -93,6 +97,8 @@ import { StudentSemestersNewComponent } from './students/student-semesters/stude
     MatOption,
     MatCard,
     MatProgressSpinner,
+    MatCheckbox,
+    TranslatePipe,
     // Omogućava pristup svemu što je eksportovano iz SharedModule
   ],
   providers: []

@@ -1,1 +1,33 @@
-<p>student-semesters-new works!</p>
+<mat-card class="semesters">
+  <h2>{{ 'SEM.TITLE' | translate }}  {{ student?.firstName }}  {{ student?.lastName }}</h2>
+
+  <form (ngSubmit)="saveSemester()" [formGroup]="semesterForm">
+
+    <div class="datum">
+      <label>{{ 'SEM.DATE' | translate }} </label>
+      <input formControlName="date" type="date">
+    </div>
+
+
+    <app-my-input-text [myLabel]="'SEM.YEAR' | translate" [myPlaceholder]="'SEM.YEAR_PH' | translate"
+                       myControlName="yearOfStudy"></app-my-input-text>
+
+    <app-my-dropdown [myLabel]="'SEM.ACADEMIC' | translate" [myPlaceholder]="'SEM.ACADEMIC_PH' | translate"
+                     [options]="academicYearsss"
+                     myControlName="academicYearId"></app-my-dropdown>
+
+    <app-my-input-text [myLabel]="'SEM.PRICE' | translate" [myPlaceholder]="'SEM.PRICE_PH' | translate"
+                       myControlName="price"></app-my-input-text>
+
+    <mat-checkbox formControlName="renewal">{{ 'SEM.RENEWAL' | translate }}</mat-checkbox>
+
+    <!--    [disabled]="semesterForm.invalid"-->
+    <div class="form-buttons">
+      <button [disabled]="semesterForm.invalid" color="primary" mat-raised-button
+              type="submit">{{ 'SEM.SAVE' | translate }}
+      </button>
+      <button color="warn" mat-raised-button routerLink="/admin/students" type="button">{{ 'SEM.CANCEL' | translate }}
+      </button>
+    </div>
+  </form>
+</mat-card>

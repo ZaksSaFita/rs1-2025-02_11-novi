@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RS1_2024_25.API.Data;
 
@@ -11,9 +12,11 @@ using RS1_2024_25.API.Data;
 namespace RS1_2024_25.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250701123805_student")]
+    partial class student
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -474,46 +477,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Students", (string)null);
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Semestar", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AcademicYearId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("MyAppUserId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("Renewal")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YearOfStudy")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AcademicYearId");
-
-                    b.HasIndex("MyAppUserId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Semestars", (string)null);
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.SharedTables.City", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.SharedTables.Region", "Region")
@@ -664,33 +627,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("Tenant");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Semestar", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.SharedTables.AcademicYear", "AcademicYear")
-                        .WithMany()
-                        .HasForeignKey("AcademicYearId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.TenantSpecificTables.Modul1_Auth.MyAppUser", "MyAppUser")
-                        .WithMany()
-                        .HasForeignKey("MyAppUserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.TenantSpecificTables.Modul2_Basic.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("AcademicYear");
-
-                    b.Navigation("MyAppUser");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.SharedTables.City", b =>
